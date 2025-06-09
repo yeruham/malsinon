@@ -16,7 +16,7 @@ namespace malsinon
             //malshinon.addPeople(person);
             //Report report = new Report(4, 3, "he is very dangers");
             //malshinon.addReport(report);
-            malshinon.getPeople();
+            malshinon.getPeopleByName("yeruham", "mendelson");
         }
     }
 }

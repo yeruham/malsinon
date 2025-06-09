@@ -36,7 +36,7 @@ public class DALMalshinon
         
         try
         {
-            command = new MySqlCommand(query, connection);
+            command = new MySqlCommand(query, this.connection);
             command.Parameters.AddWithValue("@first_name", person.firstName);
             command.Parameters.AddWithValue("@last_name", person.lastName);
             command.Parameters.AddWithValue("@secret_code", person.secretCode);
@@ -61,7 +61,7 @@ public class DALMalshinon
         
         try
         {
-            command = new MySqlCommand(query, connection);
+            command = new MySqlCommand(query, this.connection);
             command.Parameters.AddWithValue("@reporter_id", report.reporter_id);
             command.Parameters.AddWithValue("@target_id", report.target_id);
             command.Parameters.AddWithValue("@text", report.text);
@@ -74,15 +74,13 @@ public class DALMalshinon
         }
     }
 
-    public List<Person> getPeople()
+    private List<Person> getPeople(MySqlCommand command)
     {
-        this.openConnection();
         List<Person> people = new List<Person>();
-        string query = "SELECT * FROM people";
 
         try
         {
-            command = new MySqlCommand(query, connection);
+            //command = new MySqlCommand(query, connection);
             var reader = command.ExecuteReader();
             while (reader.Read())
             {
@@ -106,13 +104,34 @@ public class DALMalshinon
         return people;
     }
 
+    public List<Person> getAllPeople()
+    {
+        this.openConnection();
+        List<Person> people = new List<Person>();
+        string query = "SELECT * FROM people";
+        command = new MySqlCommand(query, this.connection);
+        
+        people = this.getPeople(command);
+        
+        return people;
+
+    }
+
     public void setReports()
     {
 
     }
-    public void getPeopleByName()
+    public List<Person> getPeopleByName(string firstName, string lastName)
     {
-
+        this.openConnection();
+        List<Person> people = new List<Person>();
+        string query = "SELECT * FROM people WHERE first_name = @firstName AND last_name = @lastName";
+        command = new MySqlCommand(query, this.connection);
+        command.Parameters.AddWithValue("@firstName", firstName);
+        command.Parameters.AddWithValue("@lastName", lastName);
+        people = this.getPeople(command);
+        
+        return people;
     }
 
 }
