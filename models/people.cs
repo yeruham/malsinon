@@ -1,4 +1,6 @@
-﻿public class Person
+﻿using System;
+
+public class Person
 {
     public int id { get; set; }
     public string firstName { get; set; }
@@ -9,7 +11,7 @@
     public int numMentions { get; set; }
 
     // consteactor with id 
-    public Person(int id, string firstName, string lastName, string secretCode, string type, int numReports, int numMentions)
+    public Person(int id, string firstName, string lastName, string secretCode, string type, int numReports)
     {
         this.id = id;
         this.firstName = firstName;
@@ -31,4 +33,9 @@
         this.numMentions = numMentions;
     }
 
+    public void printPerson()
+    {
+        Console.WriteLine($"person id: {this.id}, full name: {this.firstName} {this.lastName}, secret code {this.secretCode}." +
+            $"\ntype: {this.type}, num reports: {this.numReports} num mentions: {this.numMentions}.");
+    }
 }

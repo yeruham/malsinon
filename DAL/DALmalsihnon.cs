@@ -30,11 +30,11 @@ public class DALMalshinon
     public void addPeople(Person person)
     {
         this.openConnection();
+        string query = "INSERT INTO people(first_name, last_name, secret_code, type, num_reports, num_mentions)" +
+                "VALUES(@first_name, @last_name, @secret_code, @type, @num_reports, @num_mentions)";
+        
         try
         {
-            string query = "INSERT INTO people(first_name, last_name, secret_code, type, num_reports, num_mentions)" +
-                           "VALUES(@first_name, @last_name, @secret_code, @type, @num_reports, @num_mentions)";
-
             command = new MySqlCommand(query, connection);
             command.Parameters.AddWithValue("@first_name", person.firstName);
             command.Parameters.AddWithValue("@last_name", person.lastName);
@@ -55,16 +55,15 @@ public class DALMalshinon
     public void addReport(Report report)
     {
         this.openConnection();
+        string query = "INSERT INTO intelreports(reporter_id, target_id, text)" +
+               "VALUES(@reporter_id, @target_id, @text)";
+        
         try
         {
-            string query = "INSERT INTO report(reported_id, target_id, text, timestamp)" +
-                           "VALUES(@reported_id, @target_id, @text, @timestamp)";
-
             command = new MySqlCommand(query, connection);
-            command.Parameters.AddWithValue("@reported_id", report.reported_id);
+            command.Parameters.AddWithValue("@reporter_id", report.reporter_id);
             command.Parameters.AddWithValue("@target_id", report.target_id);
             command.Parameters.AddWithValue("@text", report.text);
-            command.Parameters.AddWithValue("@timestamp", report.timestamp);
 
             command.ExecuteNonQuery();
         }
@@ -74,10 +73,21 @@ public class DALMalshinon
         }
     }
 
-
     public void getPeople()
     {
+        this.openConnection();
+        string query = "SELECT * FROM people";
 
+        try
+        {
+            command = new MySqlCommand(query, connection);
+            //MySqlCommand 
+            command.ExecuteReader();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
     }
 
     public void setReports()
