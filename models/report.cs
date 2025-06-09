@@ -27,6 +27,6 @@ public class Report
     public void printReport()
     {
         Console.WriteLine($"report by: {this.reporter_id}, target on {this.target_id}, time report: {this.timestamp}.\n" +
-            $"text: {this.text}");
+            $"text: {this.text}\n");
     }
 }

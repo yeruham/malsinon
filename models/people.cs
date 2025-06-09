@@ -11,7 +11,7 @@ public class Person
     public int numMentions { get; set; }
 
     // consteactor with id 
-    public Person(int id, string firstName, string lastName, string secretCode, string type, int numReports)
+    public Person(int id, string firstName, string lastName, string secretCode, string type, int numReports, int numMentions)
     {
         this.id = id;
         this.firstName = firstName;
@@ -36,6 +36,6 @@ public class Person
     public void printPerson()
     {
         Console.WriteLine($"person id: {this.id}, full name: {this.firstName} {this.lastName}, secret code {this.secretCode}." +
-            $"\ntype: {this.type}, num reports: {this.numReports} num mentions: {this.numMentions}.");
+            $"\ntype: {this.type}, num reports: {this.numReports} num mentions: {this.numMentions}.\n");
     }
 }

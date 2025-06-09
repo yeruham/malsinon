@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MySqlConnector;
 
 public class DALMalshinon
@@ -73,21 +74,36 @@ public class DALMalshinon
         }
     }
 
-    public void getPeople()
+    public List<Person> getPeople()
     {
         this.openConnection();
+        List<Person> people = new List<Person>();
         string query = "SELECT * FROM people";
 
         try
         {
             command = new MySqlCommand(query, connection);
-            //MySqlCommand 
-            command.ExecuteReader();
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                int id = reader.GetInt32("id");
+                string firstName = reader.GetString("first_name");
+                string lastName = reader.GetString("last_name");
+                string secretCode = reader.GetString("secret_code");
+                string type = reader.GetString("type");
+                int numReports = reader.GetInt32("num_reports");
+                int numMentions = reader.GetInt32("num_mentions");
+                Person person = new Person(id, firstName, lastName, secretCode, type, numReports, numMentions);
+                person.printPerson();
+                people.Add(person);
+            }
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
+        
+        return people;
     }
 
     public void setReports()
