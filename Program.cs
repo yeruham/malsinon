@@ -11,6 +11,8 @@ namespace malsinon
         static void Main(string[] args)
         {
             Console.WriteLine();
+            Report report = new Report(1, 2, "yeruham", DateTime.Now);
+            Console.WriteLine(report.timestamp.Minute);
         }
     }
 }
