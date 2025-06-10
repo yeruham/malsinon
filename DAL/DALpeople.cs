@@ -86,9 +86,6 @@ public class DALpeople: DALMalshinon
         List<Person> people;
 
         string query = "SELECT * FROM people WHERE first_name = @firstName AND last_name = @lastName";
-        //Dictionary<string, string> parametrs = new Dictionary<string, string> { };
-        //parametrs.Add("@firstName", firstName);
-        //parametrs.Add("@lastName", lastName);
         try
         {
             this.command = new MySqlCommand(query, connection);
@@ -109,8 +106,6 @@ public class DALpeople: DALMalshinon
         List<Person> people;
 
         string query = "SELECT * FROM people WHERE secret_Code = @secretCode";
-        //Dictionary<string, string> parametrs = new Dictionary<string, string> { };
-        //parametrs.Add("@secretCode", secretCode);
         try
         {
             this.command = new MySqlCommand(query, connection);
@@ -131,8 +126,6 @@ public class DALpeople: DALMalshinon
         List<Person> people;
 
         string query = "SELECT * FROM people WHERE type = @type";
-        //Dictionary<string, string> parametrs = new Dictionary<string, string> { };
-        //parametrs.Add("@type", type);
         try
         {
             this.command = new MySqlCommand(query, connection);

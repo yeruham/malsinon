@@ -28,26 +28,4 @@ public abstract class DALMalshinon
         connection.Close();
     }
 
-
-    protected MySqlCommand creatCommand(string query, Dictionary<string, string> parametrs = null)
-    {
-        try
-        {
-            command = new MySqlCommand(query, this.connection);
-
-            if (parametrs != null)
-            {
-                foreach (KeyValuePair<string, string> parmetr in parametrs)
-                {
-                    command.Parameters.AddWithValue(parmetr.Key, parmetr.Value);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
-        }
-        return command;
-    }
-
 }
