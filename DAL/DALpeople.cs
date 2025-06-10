@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class DALpeople: DALMalshinon
 {
+    // function to insert new Person to people_table - receiving Person object and return bool if success.
     public bool addPerson(Person person)
     {
         int success = 0;
@@ -33,6 +34,8 @@ public class DALpeople: DALMalshinon
         return (success > 0);
     }
 
+    // private function to get lines from people_table -
+    // receiving MySqlCommand object and return list with lines that compatible to query.
     private List<Person> getPeople(MySqlCommand command)
     {
         List<Person> people = new List<Person>();
@@ -62,6 +65,8 @@ public class DALpeople: DALMalshinon
         return people;
     }
 
+    // function to get all lines from people_table -
+    // return list with objects of Person. use in private function -> getPeople.
     public List<Person> getAllPeople()
     {
         List<Person> people;
@@ -81,6 +86,8 @@ public class DALpeople: DALMalshinon
 
     }
 
+    // function to get lines from people_table by full name -
+    // receiving first and last name, and return list with objects of Person. use in private function -> getPeople.
     public List<Person> getPeopleByName(string firstName, string lastName)
     {
         List<Person> people;
@@ -101,6 +108,8 @@ public class DALpeople: DALMalshinon
         return people;
     }
 
+    // function to get lines from people_table by secretCode -
+    // receiving secretCode, and return list with objects of Person. use in private function -> getPeople.
     public List<Person> getPeopleBySecretCode(string secretCode)
     {
         List<Person> people;
@@ -121,6 +130,8 @@ public class DALpeople: DALMalshinon
         return people;
     }
 
+    // function to get lines from people_table by type -
+    // receiving type, and return list with objects of Person. use in private function -> getPeople.
     public List<Person> getPeopleByType(string type)
     {
         List<Person> people;
@@ -141,6 +152,8 @@ public class DALpeople: DALMalshinon
         return people;
     }
 
+    // function to change num reports in line of people_table by id -
+    // receiving id of people and num (defult 1), and return bool if success.
     public bool updateNumReports(int reporter_id, int num = 1)
     {
         int success = 0;
@@ -160,7 +173,8 @@ public class DALpeople: DALMalshinon
         return (success > 0);
     }
 
-
+    // function to change num mentions in line of people_table by id -
+    // receiving id of people and num (defult 1), and return bool if success.
     public bool updateNumMentions(int target_id, int num = 1)
     {
         int success = 0;
@@ -180,8 +194,8 @@ public class DALpeople: DALMalshinon
         return (success > 0);
     }
 
-
-
+    // function to change type in line of people_table by id -
+    // receiving id of people and num (defult 1), and return bool if success.
     public bool updateType(int id, string type)
     {
         int success = 0;

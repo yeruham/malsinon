@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class DALreports: DALMalshinon
 {
+    // function to insert new Report to intelreport_table - receiving Report object and return bool if success.
     public bool addReport(Report report)
     {
         int success = 0;
@@ -28,6 +29,8 @@ public class DALreports: DALMalshinon
         return (success > 0);
     }
 
+    // private function to get lines from intelreport_table
+    // receiving MySqlCommand object and return list with lines that compatible to query.
     private List<Report> getReports(MySqlCommand command)
     {
         List<Report> reports = new List<Report>();
@@ -55,6 +58,8 @@ public class DALreports: DALMalshinon
         return reports;
     }
 
+    // function to get all lines from intelreport_table 
+    // return list with objects of Report. use in private function - getReports.
     public List<Report> getAllReports()
     {
         List<Report> reports;
@@ -72,6 +77,8 @@ public class DALreports: DALMalshinon
         return reports;
     }
 
+    // function to get lines from intelreport_table by reported_id
+    // receiving  reported_id, and return list with objects of Report. use in private function - getPeople.
     public List<Report> getReportsByReporterId(int reporterId)
     {
         List<Report> reports;
@@ -90,6 +97,8 @@ public class DALreports: DALMalshinon
         return reports;
     }
 
+    // function to get lines from intelreport_table by target_id
+    // receiving  target_id, and return list with objects of Report. use in private function - getPeople.
     public List<Report> getReportsByTargetId(int targetId)
     {
         List<Report> reports;
