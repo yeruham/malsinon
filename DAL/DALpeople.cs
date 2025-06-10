@@ -10,6 +10,8 @@ public class DALpeople: DALMalshinon
         string query = "INSERT INTO people(first_name, last_name, secret_code, type, num_reports, num_mentions)" +
                 "VALUES(@first_name, @last_name, @secret_code, @type, @num_reports, @num_mentions)";
 
+        Dictionary<string, string> parametrs = new Dictionary<string, string> { };
+
         try
         {
             command = new MySqlCommand(query, this.connection);
@@ -60,25 +62,6 @@ public class DALpeople: DALMalshinon
         return people;
     }
 
-    private MySqlCommand creatCommand(string query, Dictionary<string, string> parametrs = null)
-    {
-        this.openConnection();
-        try
-        {
-            command = new MySqlCommand(query, this.connection);
-
-            foreach (KeyValuePair<string, string> parmetr in parametrs)
-            {
-                command.Parameters.AddWithValue(parmetr.Key, parmetr.Value);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
-        }
-        return command;
-    }
-
     public List<Person> getAllPeople()
     {
         List<Person> people = new List<Person>();
@@ -93,8 +76,8 @@ public class DALpeople: DALMalshinon
     public List<Person> getPeopleByName(string firstName, string lastName)
     {
         List<Person> people = new List<Person>();
-        string query = "SELECT * FROM people WHERE first_name = @firstName AND last_name = @lastName";
 
+        string query = "SELECT * FROM people WHERE first_name = @firstName AND last_name = @lastName";
         Dictionary<string, string> parametrs = new Dictionary<string, string> { };
         parametrs.Add("@firstName", firstName);
         parametrs.Add("@lastName", lastName);
@@ -107,6 +90,7 @@ public class DALpeople: DALMalshinon
     public List<Person> getPeopleBySecretCode(string secretCode)
     {
         List<Person> people = new List<Person>();
+
         string query = "SELECT * FROM people WHERE secret_Code = @secretCode";
         Dictionary<string, string> parametrs = new Dictionary<string, string> { };
         parametrs.Add("@secretCode", secretCode);
@@ -118,6 +102,7 @@ public class DALpeople: DALMalshinon
     public List<Person> getPeopleByType(string type)
     {
         List<Person> people = new List<Person>();
+
         string query = "SELECT * FROM people WHERE type = @type";
         Dictionary<string, string> parametrs = new Dictionary<string, string> { };
         parametrs.Add("@type", type);
