@@ -21,6 +21,7 @@ namespace malsinon
             DALpeople people = new DALpeople();
             reports.openConnection();
             reports.getAllReports();
+            reports.getReportsByReporterId(4);
             reports.stopConnection();
 
             people.openConnection();

@@ -28,13 +28,12 @@ public class DALreports: DALMalshinon
         return (success > 0);
     }
 
-    private List<Report> getReports(string query, Dictionary<string, string> parametrs = null)
+    private List<Report> getReports(MySqlCommand command)
     {
         List<Report> reports = new List<Report>();
 
         try
         {
-            command = this.creatCommand(query, parametrs);
             var reader = command.ExecuteReader();
 
             while (reader.Read())
@@ -60,15 +59,53 @@ public class DALreports: DALMalshinon
     {
         List<Report> reports;
         string query = "SELECT * FROM intelreports";
+        try
+        {
+            this.command = new MySqlCommand(query, connection);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+        reports = this.getReports(command);
 
-        reports = this.getReports(query);
-        
         return reports;
     }
 
-    //public List<Report> getReportsByReporterId()
-    //{
+    public List<Report> getReportsByReporterId(int reporterId)
+    {
+        List<Report> reports;
+        string query = "SELECT * FROM intelreports WHERE reporter_id = @reporterId";
+        try
+        {
+            this.command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue(" @reporterId", reporterId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+        reports = this.getReports(command);
 
-    //}
+        return reports;
+    }
+
+    public List<Report> getReportsByTargetId(int targetId)
+    {
+        List<Report> reports;
+        string query = "SELECT * FROM intelreports WHERE target_id = @targetId";
+        try
+        {
+            this.command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue(" @targetId", targetId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+        reports = this.getReports(command);
+
+        return reports;
+    }
 
 }
