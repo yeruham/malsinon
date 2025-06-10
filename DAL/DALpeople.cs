@@ -4,8 +4,9 @@ using System.Collections.Generic;
 
 public class DALpeople: DALMalshinon
 {
-    public void addPeople(Person person)
+    public bool addPerson(Person person)
     {
+        int success = 0;
         this.openConnection();
         string query = "INSERT INTO people(first_name, last_name, secret_code, type, num_reports, num_mentions)" +
                 "VALUES(@first_name, @last_name, @secret_code, @type, @num_reports, @num_mentions)";
@@ -22,23 +23,22 @@ public class DALpeople: DALMalshinon
             command.Parameters.AddWithValue("@num_reports", person.numReports);
             command.Parameters.AddWithValue("@num_mentions", person.numMentions);
 
-            command.ExecuteNonQuery();
+            success = command.ExecuteNonQuery();
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
 
+        return (success > 0);
     }
 
-    private List<Person> getPeople(string query, Dictionary<string, string> parametrs = null)
+    private List<Person> getPeople(MySqlCommand command)
     {
         List<Person> people = new List<Person>();
 
         try
         {
-            command = this.creatCommand(query, parametrs);
-            
             var reader = command.ExecuteReader();
             while (reader.Read())
             {
@@ -53,21 +53,29 @@ public class DALpeople: DALMalshinon
                 person.printPerson();
                 people.Add(person);
             }
+            reader.Close();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+        return people;
+    }
+
+    public List<Person> getAllPeople()
+    {
+        List<Person> people;
+        string query = "SELECT * FROM people";
+        try
+        {
+            this.command = new MySqlCommand(query, connection);
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
 
-        return people;
-    }
-
-    public List<Person> getAllPeople()
-    {
-        List<Person> people = new List<Person>();
-        string query = "SELECT * FROM people";
-
-        people = this.getPeople(query);
+        people = this.getPeople(command);
 
         return people;
 
@@ -75,40 +83,129 @@ public class DALpeople: DALMalshinon
 
     public List<Person> getPeopleByName(string firstName, string lastName)
     {
-        List<Person> people = new List<Person>();
+        List<Person> people;
 
         string query = "SELECT * FROM people WHERE first_name = @firstName AND last_name = @lastName";
-        Dictionary<string, string> parametrs = new Dictionary<string, string> { };
-        parametrs.Add("@firstName", firstName);
-        parametrs.Add("@lastName", lastName);
-
-        people = this.getPeople(query, parametrs);
+        //Dictionary<string, string> parametrs = new Dictionary<string, string> { };
+        //parametrs.Add("@firstName", firstName);
+        //parametrs.Add("@lastName", lastName);
+        try
+        {
+            this.command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@firstName", firstName);
+            command.Parameters.AddWithValue("@lastName", lastName);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+        people = this.getPeople(command);
 
         return people;
     }
 
     public List<Person> getPeopleBySecretCode(string secretCode)
     {
-        List<Person> people = new List<Person>();
+        List<Person> people;
 
         string query = "SELECT * FROM people WHERE secret_Code = @secretCode";
-        Dictionary<string, string> parametrs = new Dictionary<string, string> { };
-        parametrs.Add("@secretCode", secretCode);
+        //Dictionary<string, string> parametrs = new Dictionary<string, string> { };
+        //parametrs.Add("@secretCode", secretCode);
+        try
+        {
+            this.command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@secretCode", secretCode);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
 
-        people = this.getPeople(query, parametrs);
+        people = this.getPeople(command);
+        
         return people;
     }
 
     public List<Person> getPeopleByType(string type)
     {
-        List<Person> people = new List<Person>();
+        List<Person> people;
 
         string query = "SELECT * FROM people WHERE type = @type";
-        Dictionary<string, string> parametrs = new Dictionary<string, string> { };
-        parametrs.Add("@type", type);
+        //Dictionary<string, string> parametrs = new Dictionary<string, string> { };
+        //parametrs.Add("@type", type);
+        try
+        {
+            this.command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@type", type);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
 
-        people = this.getPeople(query, parametrs);
+        people = this.getPeople(command);
+        
         return people;
+    }
+
+    public bool updateNumReports(int reporter_id, int num = 1)
+    {
+        int success = 0;
+        string query = "UPDATE people SET num_reports = num_reports + @num WHERE id = @reporter_id";
+        try
+        {
+            command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@num", num);
+            command.Parameters.AddWithValue("@reporter_id", reporter_id);
+            success = command.ExecuteNonQuery();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+
+        return (success > 0);
+    }
+
+
+    public bool updateNumMentions(int target_id, int num = 1)
+    {
+        int success = 0;
+        string query = "UPDATE people SET num_mentions = num_mentions + @num WHERE id = @target_id";
+        try
+        {
+            command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@num", num);
+            command.Parameters.AddWithValue("@target_id", target_id);
+            success = command.ExecuteNonQuery();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+
+        return (success > 0);
+    }
+
+
+
+    public bool updateType(int id, string type)
+    {
+        int success = 0;
+        string query = $"UPDATE people SET type = @type WHERE id = @id";
+        try
+        {
+            command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@type", type);
+            command.Parameters.AddWithValue("@id", id);
+            success = command.ExecuteNonQuery();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+
+        return (success > 0);
     }
 
 }

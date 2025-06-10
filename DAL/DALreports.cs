@@ -28,7 +28,7 @@ public class DALreports: DALMalshinon
         return (success > 0);
     }
 
-    public List<Report> getReports(string query, Dictionary<string, string> parametrs = null)
+    private List<Report> getReports(string query, Dictionary<string, string> parametrs = null)
     {
         List<Report> reports = new List<Report>();
 
@@ -47,6 +47,7 @@ public class DALreports: DALMalshinon
                 report.printReport();
                 reports.Add(report);
             }
+            reader.Close();
         }
         catch (Exception e)
         {
@@ -54,5 +55,20 @@ public class DALreports: DALMalshinon
         }
         return reports;
     }
+
+    public List<Report> getAllReports()
+    {
+        List<Report> reports;
+        string query = "SELECT * FROM intelreports";
+
+        reports = this.getReports(query);
+        
+        return reports;
+    }
+
+    //public List<Report> getReportsByReporterId()
+    //{
+
+    //}
 
 }
