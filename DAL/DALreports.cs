@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public class DALreports: DALMalshinon
+public  class DALreports: DALMalshinon
 {
     // function to insert new Report to intelreport_table - receiving Report object and return bool if success.
     public bool addReport(Report report)
