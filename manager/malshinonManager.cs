@@ -26,7 +26,7 @@ public class MalshinonManager : reportingManager
         Console.WriteLine("The program has ended.");
     }
 
-    protected void startReporting()
+    private void startReporting()
     {
         this.reportManager();
     }

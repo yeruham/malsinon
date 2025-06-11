@@ -1,4 +1,95 @@
-﻿public class Analysiscec
-{
+﻿using System;
+using System.Collections.Generic;
 
+public class Analysiscec
+{
+    DALpeople dalPeople;
+    DALreports dalReports;
+    public Analysiscec(DALpeople dalPeople, DALreports dalReports)
+    {
+        this.dalPeople = dalPeople;
+        this.dalReports = dalReports;
+    }
+
+    public bool isPotentialAgent(string secretCode)
+    {
+
+        List<Person> people;
+
+        people = this.dalPeople.getPeopleBySecretCode(secretCode);
+
+        if (people.Count == 0)
+        {
+            return false;
+        }
+
+        Person person;
+        person = people[0];
+
+        if (person.numReports < 10)
+        {
+            return false;
+        }
+
+        List<Report> reports;
+        reports = this.dalReports.getReportsByReporterId(person.id);
+        int averageLengthReports = this.averageLengthReports(reports);
+
+        if (averageLengthReports < 100)
+        {
+            return false; 
+        }
+
+        this.dalPeople.updateType(person.id, "potential_agent");
+
+        return true;
+
+    }
+
+    private int averageLengthReports(List<Report> reports)
+    {
+        int average = 0;
+        int sum = 0;
+        foreach (Report report in reports)
+        {
+            sum += report.text.Split().Length;
+        }
+        average = sum / reports.Count;
+        
+        return average;
+    }
+
+    public bool isDangerous(string secretCode)
+    {
+        List<Person> people;
+
+        people = this.dalPeople.getPeopleBySecretCode(secretCode);
+
+        if (people.Count == 0)
+        {
+            return false;
+        }
+
+        Person person;
+        person = people[0];
+
+        if (person.numMentions < 3)
+        {
+            return false;
+        }
+
+        List<Report> reports;
+        reports = this.dalReports.getReportsByReporterId(person.id);
+
+        if (reports.Count > 3)
+        {
+            int timeGap = Convert.ToInt32(reports[0].timestamp  - reports[2].timestamp);
+            if (timeGap > 15)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

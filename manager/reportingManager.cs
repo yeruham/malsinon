@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using System;
 
-public abstract class reportingManager
+public class reportingManager
 {
     protected DALpeople dalPeople = new DALpeople();
     protected DALreports dalReports = new DALreports();
-    protected Analysiscec analysiscec = new Analysiscec();
+    protected Analysiscec analysiscec;
 
+    public reportingManager()
+    {
+        this.analysiscec = new Analysiscec(this.dalPeople, this.dalReports);
+    }
     protected void reportManager()
     {
         string[] newReport;
@@ -87,11 +91,17 @@ public abstract class reportingManager
 
             if (type == "reporter")
             {
-                dalPeople.updateNumReports(personExists[0].id);
+                dalPeople.updateNumReports(id);
             }
             else
             {
-                dalPeople.updateNumMentions(personExists[0].id);
+                dalPeople.updateNumMentions(id);
+            }
+
+            string currentType = personExists[0].type;
+            if (currentType != type)
+            {
+                dalPeople.updateType(id, "both");
             }
         }
         return id;
