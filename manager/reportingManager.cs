@@ -7,20 +7,54 @@ public abstract class reportingManager
     protected DALreports dalReports = new DALreports();
     protected Analysiscec analysiscec = new Analysiscec();
 
-    protected void startReportManager()
+    protected void reportManager()
     {
         string[] newReport;
         newReport = this.receivingReport();
-        this.reportAnalysis(newReport);
+
+        string[] reporter = newReport[0].Split(',');
+        string[] target = newReport[2].Split(',');
+        int reported_id = -1;
+        int target_id = -1;
+        
+        string nameOrCodeReporter = this.nameOrCode(reporter);
+        
+        if (nameOrCodeReporter == "name")
+        {
+            reported_id = this.reportByName(reporter, "reporter");
+        }
+        else
+        {
+            reported_id = this.reportByCode(reporter, "reporter");
+        }
+
+        
+        string nameOrCodeTarget = this.nameOrCode(target);
+        
+        if (nameOrCodeReporter == "name")
+        {
+            target_id = this.reportByName(target, "target");
+        }
+        else
+        {
+            target_id = this.reportByCode(target , "target");
+        }
+
+        if (reported_id != -1 && target_id != -1) 
+        {
+            Report report = new Report(reported_id, target_id, newReport[1]);
+            dalReports.addReport(report); 
+        }
     }
+
     private string[] receivingReport()
     {
-        Console.WriteLine("Enter your full name in such a format - first name, last name " +
-                         "(with a comma between them) or your secrat code.");
+        Console.WriteLine("Enter your full name in such a format - first name,last name " +
+                         "(with a comma between them without profits) or your secrat code.");
         string reporter = Console.ReadLine();
 
-        Console.WriteLine("Enter full name of target in such a format - first name, last name " +
-            "(with a comma between them) or his secret code.");
+        Console.WriteLine("Enter full name of target in such a format - first name,last name " +
+            "(with a comma between them without profits) or his secret code.");
         string target = Console.ReadLine();
 
         Console.WriteLine("insert yuor information");
@@ -30,68 +64,89 @@ public abstract class reportingManager
         return details;
     }
 
-    private bool reportAnalysis(string[] details)
+    private int reportByName(string[] details, string type)
     {
-        bool success = false;
+        int id = -1;
+        List<Person> personExists;
+        string firstName = details[0];
+        string lastName = details[1];
 
-        string[] reporter = details[0].Split(',');
-        string[] target = details[2].Split(',');
-        List<Person> personExists = new List<Person>();
-        string firstName = "";
-        string lastName = "";
-        string secretCode = "";
-        Person newPerson;
+        personExists = dalPeople.getPeopleByName(firstName, lastName);
 
-
-        if (reporter.Length > 1)
+        if (personExists.Count == 0)
         {
-            firstName = reporter[0];
-            lastName = reporter[1];
-            secretCode = Creation.createSecretCode(firstName, lastName);
-            personExists = dalPeople.getPeopleByName(firstName, lastName);
+            string secretCode = Creation.createSecretCode(firstName, lastName);
+            Person person = Creation.creatPerson(firstName, lastName, secretCode, type);
+            dalPeople.addPerson(person);
+            
+            id = this.getPersonId(firstName, lastName);
         }
         else
         {
-            secretCode = reporter[0];
-            personExists = dalPeople.getPeopleBySecretCode(secretCode);
+            id = personExists[0].id;
+
+            if (type == "reporter")
+            {
+                dalPeople.updateNumReports(personExists[0].id);
+            }
+            else
+            {
+                dalPeople.updateNumMentions(personExists[0].id);
+            }
         }
+        return id;
+    }
+
+    private int reportByCode(string[] details, string type)
+    {
+        List<Person> personExists;
+        string secretCode = details[0];
+        int id = -1;
+        
+        personExists = dalPeople.getPeopleBySecretCode(secretCode);
 
 
         if (personExists.Count == 0)
         {
-            newPerson = Creation.creatPerson(firstName, lastName, secretCode, "reporter");
-            success = dalPeople.addPerson(newPerson);
+            Console.WriteLine("The code name does not exist in the system.");
         }
         else
         {
-            success = dalPeople.updateNumReports(personExists[0].id);
+            id = personExists[0].id;
+
+            if (type == "reporter")
+            {
+                dalPeople.updateNumReports(personExists[0].id);
+            }
+            else
+            {
+                dalPeople.updateNumMentions(personExists[0].id);
+            }
         }
+        return id;
+    }
 
-
-        if (target.Length > 1)
+    private string nameOrCode(string[] personalDetails)
+    {
+        if (personalDetails.Length > 1)
         {
-            firstName = target[0];
-            lastName = target[1];
-            secretCode = Creation.createSecretCode(firstName, lastName);
-            personExists = dalPeople.getPeopleByName(firstName, lastName);
+            return "name";
         }
         else
         {
-            secretCode = target[0];
-            personExists = dalPeople.getPeopleBySecretCode(secretCode);
+            return "code";
         }
+    }
 
-        if (personExists.Count == 0)
+    private int getPersonId(string firstName, string lastName)
+    {
+        int id = -1;
+        List<Person> people = dalPeople.getPeopleByName(firstName, lastName);
+        if (people.Count > 0)
         {
-            newPerson = Creation.creatPerson(firstName, lastName, secretCode, "target");
-            success = dalPeople.addPerson(newPerson);
-
+            id = people[0].id;
         }
-        else
-        {
-            success = dalPeople.updateNumReports(personExists[0].id);
-        }
-        return success;
+        return id;
     }
 
 }
