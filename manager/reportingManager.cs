@@ -44,6 +44,12 @@ public class reportingManager
             target_id = this.reportByCode(target , "target");
         }
 
+        this.analysiscec.PotentialAgent(reported_id);
+        if (this.analysiscec.isDangerous(target_id))
+        {
+            Console.WriteLine("this target man is very dangerous!!");
+        }
+
         if (reported_id != -1 && target_id != -1) 
         {
             Report report = new Report(reported_id, target_id, newReport[1]);

@@ -88,6 +88,30 @@ public class DALpeople: DALMalshinon
 
     }
 
+    // function to get lines from people_table by id
+    // receiving id, and return list with objects of Person. use in private function - getPeople.
+    public List<Person> getPeopleById(int id)
+    {
+        List<Person> people;
+        string query = "SELECT * FROM people WHERE id = @id";
+        this.openConnection();
+
+        try
+        {
+            this.command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@id", id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+
+        people = this.getPeople(command);
+        this.stopConnection();
+
+        return people;
+    }
+
     // function to get lines from people_table by full name
     // receiving first and last name, and return list with objects of Person. use in private function - getPeople.
     public List<Person> getPeopleByName(string firstName, string lastName)

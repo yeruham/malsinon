@@ -11,12 +11,12 @@ public class Analysiscec
         this.dalReports = dalReports;
     }
 
-    public bool isPotentialAgent(string secretCode)
+    public bool PotentialAgent(int id)
     {
 
         List<Person> people;
 
-        people = this.dalPeople.getPeopleBySecretCode(secretCode);
+        people = this.dalPeople.getPeopleById(id);
 
         if (people.Count == 0)
         {
@@ -59,11 +59,11 @@ public class Analysiscec
         return average;
     }
 
-    public bool isDangerous(string secretCode)
+    public bool isDangerous(int id)
     {
         List<Person> people;
 
-        people = this.dalPeople.getPeopleBySecretCode(secretCode);
+        people = this.dalPeople.getPeopleById(id);
 
         if (people.Count == 0)
         {
