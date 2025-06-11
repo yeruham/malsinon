@@ -83,7 +83,7 @@ public class Analysiscec
 
         if (reports.Count > 3)
         {
-            int timeGap = Convert.ToInt32(reports[0].timestamp  - reports[2].timestamp);
+            int timeGap = (int)(reports[0].timestamp - reports[2].timestamp).TotalMinutes;
             if (timeGap > 15)
             {
                 return false;
