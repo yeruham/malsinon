@@ -22,6 +22,7 @@ public class Report
         this.reporter_id = reporter_id;
         this.target_id = target_id;
         this.text = text;
+        Console.WriteLine($"new report {this.text} Created successfully");
     }
 
     public void printReport()

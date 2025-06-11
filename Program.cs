@@ -17,21 +17,23 @@ namespace malsinon
             //Report report = new Report(4, 3, "he is very dangers");
             //malshinon.addReport(report);
             //malshinon.getPeopleByName("yeruham", "mendelson");
-            DALreports reports = new DALreports();
-            DALpeople people = new DALpeople();
-            reports.openConnection();
-            reports.getAllReports();
-            reports.getReportsByReporterId(4);
-            reports.stopConnection();
+            //DALreports reports = new DALreports();
+            //DALpeople people = new DALpeople();
+            //reports.openConnection();
+            //reports.getAllReports();
+            //reports.getReportsByReporterId(4);
+            //reports.stopConnection();
 
-            people.openConnection();
-            people.getPeopleByName("yeruham", "mendelson");
+            //people.openConnection();
+            //people.getPeopleByName("yeruham", "mendelson");
             //people.stopConnection();
             //people.openConnection();
-            people.getPeopleByType("reporter");
-            people.updateType(3, "both");
-            people.updateNumReports(3);
-            people.stopConnection();
+            //people.getPeopleByType("reporter");
+            //people.updateType(3, "both");
+            //people.updateNumReports(3);
+            //people.stopConnection();
+            MalshinonManager manager = new MalshinonManager();
+            manager.startProgram();
 
         }
     }

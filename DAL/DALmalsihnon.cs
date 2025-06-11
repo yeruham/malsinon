@@ -18,12 +18,12 @@ public abstract class DALMalshinon
         this.connection = new MySqlConnection(ConnectionAddress);
     }
 
-    public void openConnection()
+    protected void openConnection()
     {
         connection.Open();
     }
 
-    public void stopConnection()
+    protected void stopConnection()
     {
         connection.Close();
     }

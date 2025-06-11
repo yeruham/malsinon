@@ -3,53 +3,103 @@ using System.Collections.Generic;
 
 public class MalshinonManager
 {
-    private DALpeople dalPeople;
-    private DALreports dalReports;
+    private DALpeople dalPeople = new DALpeople();
+    private DALreports dalReports = new DALreports();
 
-    public MalshinonManager()
+    //public MalshinonManager()
+    //{
+    //    DALpeople dalPeople = new DALpeople();
+    //    DALreports dalReports = new DALreports();
+    //}
+    public void startProgram()
     {
-        DALpeople dalPeople = new DALpeople();
-        DALreports dalReports = new DALreports();
-    }
-    public void start()
-    {
-        dalPeople.openConnection();
-        dalReports.openConnection();
-        string selectionNum = "";
-        string[] newReport;
+        string selection = "0";
 
         do
         {
-            selectionNum = this.menu();
+            selection = this.basicMenu();
 
-            switch (selectionNum)
+            switch (selection)
             {
                 case "1":
-                    newReport = this.receivingReport();
-
+                    this.startReporting();
                     break;
                 case "2":
-                    break;
-                case "3":
+                    this.startManaging();
                     break;
             }
 
-        } while (selectionNum != "4");
+        } while (selection != "0");
 
-        dalPeople.stopConnection();
-        dalReports.stopConnection();
+        Console.WriteLine("The program has ended.");
     }
 
-    public string menu()
+    private void startReporting()
+    {
+        string[] newReport;
+        newReport = this.receivingReport();
+        this.reportAnalysis(newReport);
+    }
+
+    private void startManaging()
+    {
+        string selection = "0";
+
+        do
+        {
+            selection = this.menuManager();
+
+            switch (selection)
+            {
+                case "1":
+                    this.printPeople();
+                    break;
+                case "2":
+                    this.printReports();
+                    break;
+            }
+        }
+        while (selection != "0");
+    }
+
+
+    private string basicMenu()
     {
         string menu = "To insert a new report enter 1.\n" +
-                      "To show all people enter 2.\n" +
-                      "To show all reports enter 3.\n" +
-                      "To exit enter 4";
+                      "To access information enter 2\n" +
+                      "To exit enter 0";
 
         Console.WriteLine(menu);
         string selectionNum = Console.ReadLine();
         return selectionNum;
+    }
+
+    private string menuManager()
+    {
+        string menu = "To show all people enter 1.\n" +
+                      "To show all reports enter 2.\n" +
+                      "To return to the main menu 0";
+        Console.WriteLine(menu);
+        string selectionNum = Console.ReadLine();
+        return selectionNum;
+    }
+
+    private void printPeople()
+    {
+        List<Person> people = dalPeople.getAllPeople();
+        foreach (Person person in people)
+        {
+            person.printPerson(); 
+        }
+    }
+    
+    private void printReports()
+    {
+        List<Report> reports = dalReports.getAllReports();
+        foreach (Report report in reports)
+        {
+            report.printReport();
+        }
     }
 
     public string[] receivingReport()
@@ -71,9 +121,14 @@ public class MalshinonManager
 
     public bool reportAnalysis(string[] details)
     {
+        bool success = false;
+        foreach (string s in details)
+        {
+            Console.WriteLine("------>" + s);
+        }
         if (details.Length != 3)
         {
-            return false;
+            return success;
         }else
         {
             string[] reporter = details[0].Split(',');
@@ -82,12 +137,14 @@ public class MalshinonManager
             string firstName = "";
             string lastName = "";
             string secretCode = "";
+            Person newPerson;
 
 
             if (reporter.Length > 1)
             {
                 firstName = reporter[0];
                 lastName = reporter[1];
+                Console.WriteLine(firstName + " " + lastName);
                 personExists = dalPeople.getPeopleByName(firstName, lastName);
             }
             else
@@ -99,12 +156,14 @@ public class MalshinonManager
 
             if (personExists.Count == 0)
             {
-                this.creatPerson(firstName, lastName, secretCode, "reporter");
+                newPerson = this.creatPerson(firstName, lastName, secretCode, "reporter");
+                success = dalPeople.addPerson(newPerson);
             }
             else
             {
-                dalPeople.updateNumReports(personExists[0].id);
+                success = dalPeople.updateNumReports(personExists[0].id);
             }
+
 
             if (target.Length > 1)
             {
@@ -120,14 +179,16 @@ public class MalshinonManager
 
             if (personExists.Count == 0)
             {
-                this.creatPerson(firstName, lastName, secretCode, "target");
+                newPerson = this.creatPerson(firstName, lastName, secretCode, "target");
+                success = dalPeople.addPerson(newPerson);
+
             }
             else
             {
-                dalPeople.updateNumReports(personExists[0].id);
+                success = dalPeople.updateNumReports(personExists[0].id);
             }
         }
-        return true;
+        return success;
     }
 
 

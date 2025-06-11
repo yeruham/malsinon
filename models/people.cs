@@ -31,6 +31,7 @@ public class Person
         this.type = type;
         this.numReports = numReports;
         this.numMentions = numMentions;
+        Console.WriteLine($"new person {this.secretCode} Created successfully");
     }
 
     public void printPerson()
