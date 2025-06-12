@@ -1,67 +1,89 @@
 # Malsinon Project  
-Created by Yeruham Mendelson
+Created by **Yeruham Mendelson**
 
-## Setup  
-Run the SQL file located in the `sqlMalsinon` directory.  
-This will create a database named `malsinon` containing two tables: `people` and `reports`.
+## 📦 Setup
 
-## Tables
+1. Run the SQL file located in the `sqlMalsinon` directory.
+2. This will create a database named `malsinon` containing two tables: `people` and `reports`.
 
-### `people`  
-Each row contains information about a person with the following fields:
-- `id` – unique id  
-- `first_name` – first name  
-- `last_name` – last name  
-- `secret_code` – secret code  
-- `type` – person type  
-- `num_reports` – number of reports submitted by this person  
-- `num_mentions` – number of times this person was mentioned as a target
+## 🗃️ Database Structure
 
-### `reports`  
-Each row contains an intelligence report with the following fields:
-- `id` – unique id  
-- `reporter_id` – foreign key to person id  
-- `target_id` – foreign key to person id  
-- `text` – the information  
-- `timestamp` – reporting time
-## Usage
+### `people` Table  
+Stores information about individuals in the system.
 
-After creating the database, you can run the `program.cs` file.
+| Field         | Description                         |
+|---------------|-------------------------------------|
+| `id`          | Unique ID                           |
+| `first_name`  | First name                          |
+| `last_name`   | Last name                           |
+| `secret_code` | Secret code                         |
+| `type`        | Type (`reporter`, `target`, `both`, `potential_agent`, `dangerous`) |
+| `num_reports` | Number of reports submitted         |
+| `num_mentions`| Number of times mentioned as target |
 
-A menu will appear where you can choose to:
-- Submit a new report
-- Log in as an administrator to view the saved data
+### `reports` Table  
+Stores reports submitted by users.
 
-### Submitting a New Report
+| Field         | Description                         |
+|---------------|-------------------------------------|
+| `id`          | Unique ID                           |
+| `reporter_id` | Foreign key to `people.id` (reporter) |
+| `target_id`   | Foreign key to `people.id` (target)   |
+| `text`        | Report content                      |
+| `timestamp`   | Submission time                     |
 
-If you choose to submit a new report:
-1. You will be asked to enter your full name in the format `(firstname, lastname)`  
-   or your secret code (only accepted if the reporter already exists in the system).
-2. You will then be asked to enter the body of the report.
-3. Next, you will enter the target's full name or secret code (in the same format).
+---
 
-### How It Works
+## 🚀 Program Usage
 
-- If the reporter or the target **does not exist**, they will be automatically created and added to the `people` table with the appropriate data.
-- If they **already exist**, their `num_reports` or `num_mentions` counters will be updated accordingly.
-- The report itself will be saved in the `reports` table, with references to the reporter and the target, along with a timestamp of when it was submitted.
-### Admin Mode
+After creating the database, run the `program.cs` file.  
+You will be presented with a menu offering the following options:
 
-### Admin Mode
+### ✍️ Submit a New Report
+
+1. Enter your full name (firstname, lastname) or secret code (if you already exist in the system).
+2. Enter the content of the report.
+3. Enter the target's full name or secret code (same format).
+
+📌 **How it works**:
+- If the reporter or target doesn't exist, they will be added to the `people` table automatically.
+- If they already exist, their `num_reports` or `num_mentions` will be updated.
+- The report will be saved in the `reports` table with the correct references and timestamp.
+
+---
+
+### 🔐 Admin Mode
 
 > **To access admin mode, you must enter a password.**  
 > **Current password: `1234`**
 
-Once authenticated, you will see a menu with the following options:
+Once authenticated, you can:
 
-- View all people in the system  
-- View all reports in the system  
-- View reports **submitted by** a specific person (by entering their full name)  
-- View reports **submitted by** a specific person (by entering their secret code)  
-- View reports **about** a specific person (by entering their full name)  
-- View reports **about** a specific person (by entering their secret code)  
-- View all **potential agents** (people who submitted at least 10 reports, with an average report length of 100 words or more)  
-- View all **dangerous targets** (people who received at least 3 consecutive reports within a 15-minute window)
+- 🔍 View all people in the system  
+- 📄 View all reports  
+- 🧾 View reports **submitted by** a person (by name or secret code)  
+- 🎯 View reports **about** a person (by name or secret code)  
+- 👥 View all **potential agents**  
+  (submitted ≥ 10 reports with an average of ≥ 100 words per report)  
+- ⚠️ View all **dangerous targets**  
+  (received ≥ 3 consecutive reports within a 15-minute window)
 
-The menu will continue to display until you choose to exit (by entering `0`).
+🔁 The admin menu will repeat until you choose to exit (`0`).
+
+---
+
+## ✅ Example Flow
+
+1. User enters: David,Cohen
+2. Enters a report:  
+   *"Observed unusual behavior near the warehouse late at night."*
+3. Enters target: Rina,Levi
+
+→ Both David and Rina are added to the `people` table (if not already present).  
+→ A new row is added to `reports` with links to both.
+
+---
+
+
+
 
