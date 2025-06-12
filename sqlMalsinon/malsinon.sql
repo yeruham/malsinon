@@ -48,7 +48,7 @@ CREATE TABLE `people` (
   `first_name` varchar(20) DEFAULT NULL,
   `last_name` varchar(20) DEFAULT NULL,
   `secret_code` varchar(20) NOT NULL,
-  `type` enum('reporter','target','both','potential_agent') NOT NULL,
+  `type` enum('reporter','target','both','potential_agent', 'dangerous') NOT NULL,
   `num_reports` int(11) DEFAULT 0,
   `num_mentions` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -98,6 +98,7 @@ ALTER TABLE `people`
 ALTER TABLE `intelreports`
   ADD CONSTRAINT `intelreports_ibfk_1` FOREIGN KEY (`reporter_id`) REFERENCES `people` (`id`),
   ADD CONSTRAINT `intelreports_ibfk_2` FOREIGN KEY (`target_id`) REFERENCES `people` (`id`);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

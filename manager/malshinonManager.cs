@@ -81,6 +81,9 @@ public class MalshinonManager : reportingManager
                 case "7":
                     this.printPotentialAgents();
                     break;
+                case "8":
+                    this.printDangerous();
+                    break;
             }
         }
         while (selection != "0");
@@ -96,7 +99,8 @@ public class MalshinonManager : reportingManager
                       "To show reports by reporter name enter 5\n" +
                       "To show reports by reporter secreat_code entre 6\n" +
                       "To show all potential agents enter 7\n" +
-                      "To return to the main menu 0";
+                      "To show all dangerous man enter 8" +
+                      "To return to the main menu 0\n";
         Console.WriteLine(menu);
         string selectionNum = Console.ReadLine();
         return selectionNum;
@@ -190,6 +194,18 @@ public class MalshinonManager : reportingManager
         }
     }
 
+    private void printDangerous()
+    {
+        List<Person> people = dalPeople.getPeopleByType("dangerous");
+        foreach (Person person in people)
+        {
+            person.printPerson();
+        }
+        if (people.Count == 0)
+        {
+            Console.WriteLine("\nNo potential agents\n");
+        }
+    }
 
     private bool passwordManager()
     {

@@ -90,6 +90,8 @@ public class Analysiscec
             }
         }
 
+        this.dalPeople.updateType(person.id, "dangerous");
+
         return true;
     }
 }
