@@ -1,6 +1,46 @@
 # Malsinon Project  
 Created by **Yeruham Mendelson**
 
+## 📁 Project Structure
+
+```
+Malsinon/
+│
+├── sqlMalsinon/
+│   └── malsinon.sql
+│       → SQL script to create the `malsinon` database and its tables
+│
+├── Models/
+│   ├── Person.cs
+│   └── Report.cs
+│       → Class definitions for people and reports
+│
+├── DAL/
+│   ├── DalMalsinon.cs
+│       → Abstract base class for database communication
+│   ├── DalPeople.cs
+│       → Inherits from DalMalsinon; handles operations related to the `people` table
+│   └── DalReports.cs
+│       → Inherits from DalMalsinon; handles operations related to the `reports` table
+│
+├── Analysis/
+│   ├── Encryption.cs
+│       → Implements Atbash encryption (used for secret code generation)
+│   ├── Creation.cs
+│       → Static class for generating secret codes and creating `Person` objects
+│   └── AnalysisExec.cs
+│       → Contains logic to analyze reporters and targets,
+│          including identifying potential agents and dangerous targets
+│
+├── Manager/
+│   ├── MalsinonManager.cs
+│       → Main controller for the application: displays menus and manages flow
+│   └── ReportingManager.cs
+│       → Handles the process of submitting new reports
+│         and creating people/objects as needed
+```
+
+
 ## 📦 Setup
 
 1. Run the SQL file located in the `sqlMalsinon` directory.
@@ -83,7 +123,6 @@ Once authenticated, you can:
 → A new row is added to `reports` with links to both.
 
 ---
-
 
 
 
