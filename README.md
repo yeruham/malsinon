@@ -41,7 +41,7 @@ You will be presented with a menu offering the following options:
 
 ### ✍️ Submit a New Report
 
-1. Enter your full name (firstname, lastname) or secret code (if you already exist in the system).
+1. Enter your full name (firstname,lastname) or secret code (if you already exist in the system).
 2. Enter the content of the report.
 3. Enter the target's full name or secret code (same format).
 
