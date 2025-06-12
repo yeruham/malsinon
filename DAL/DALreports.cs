@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public class DALreports: DALMalshinon
+public  class DALreports: DALMalshinon
 {
     // function to insert new Report to intelreport_table - receiving Report object and return bool if success.
     public bool addReport(Report report)
@@ -25,6 +25,7 @@ public class DALreports: DALMalshinon
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
+        this.stopConnection();
 
         return (success > 0);
     }
@@ -46,7 +47,6 @@ public class DALreports: DALMalshinon
                 string text = reader.GetString("text");
                 DateTime timestamp = reader.GetDateTime("timestamp");
                 Report report = new Report(reporter_id, target_id, text, timestamp);
-                report.printReport();
                 reports.Add(report);
             }
             reader.Close();
@@ -64,6 +64,8 @@ public class DALreports: DALMalshinon
     {
         List<Report> reports;
         string query = "SELECT * FROM intelreports";
+        this.openConnection();
+
         try
         {
             this.command = new MySqlCommand(query, connection);
@@ -73,6 +75,7 @@ public class DALreports: DALMalshinon
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
         reports = this.getReports(command);
+        this.stopConnection();
 
         return reports;
     }
@@ -83,6 +86,8 @@ public class DALreports: DALMalshinon
     {
         List<Report> reports;
         string query = "SELECT * FROM intelreports WHERE reporter_id = @reporterId";
+        this.openConnection();
+
         try
         {
             this.command = new MySqlCommand(query, connection);
@@ -93,6 +98,7 @@ public class DALreports: DALMalshinon
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
         reports = this.getReports(command);
+        this.stopConnection();
 
         return reports;
     }
@@ -103,6 +109,8 @@ public class DALreports: DALMalshinon
     {
         List<Report> reports;
         string query = "SELECT * FROM intelreports WHERE target_id = @targetId";
+        this.openConnection();
+
         try
         {
             this.command = new MySqlCommand(query, connection);
@@ -113,6 +121,7 @@ public class DALreports: DALMalshinon
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
         reports = this.getReports(command);
+        this.stopConnection();
 
         return reports;
     }

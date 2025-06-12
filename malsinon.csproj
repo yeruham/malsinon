@@ -75,9 +75,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="analysis\analysiscs.cs" />
+    <Compile Include="analysis\Encryption.cs" />
     <Compile Include="DAL\DALmalsihnon.cs" />
     <Compile Include="DAL\DALpeople.cs" />
     <Compile Include="DAL\DALreports.cs" />
+    <Compile Include="analysis\creation.cs" />
+    <Compile Include="manager\malshinonManager.cs" />
+    <Compile Include="manager\reportingManager.cs" />
     <Compile Include="models\people.cs" />
     <Compile Include="models\report.cs" />
     <Compile Include="Program.cs" />

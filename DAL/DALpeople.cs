@@ -30,7 +30,7 @@ public class DALpeople: DALMalshinon
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
-
+        this.stopConnection();
         return (success > 0);
     }
 
@@ -53,7 +53,6 @@ public class DALpeople: DALMalshinon
                 int numReports = reader.GetInt32("num_reports");
                 int numMentions = reader.GetInt32("num_mentions");
                 Person person = new Person(id, firstName, lastName, secretCode, type, numReports, numMentions);
-                person.printPerson();
                 people.Add(person);
             }
             reader.Close();
@@ -71,6 +70,8 @@ public class DALpeople: DALMalshinon
     {
         List<Person> people;
         string query = "SELECT * FROM people";
+        this.openConnection();
+
         try
         {
             this.command = new MySqlCommand(query, connection);
@@ -79,11 +80,36 @@ public class DALpeople: DALMalshinon
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
-
+        
         people = this.getPeople(command);
+        this.stopConnection();
 
         return people;
 
+    }
+
+    // function to get lines from people_table by id
+    // receiving id, and return list with objects of Person. use in private function - getPeople.
+    public List<Person> getPeopleById(int id)
+    {
+        List<Person> people;
+        string query = "SELECT * FROM people WHERE id = @id";
+        this.openConnection();
+
+        try
+        {
+            this.command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@id", id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
+        }
+
+        people = this.getPeople(command);
+        this.stopConnection();
+
+        return people;
     }
 
     // function to get lines from people_table by full name
@@ -91,8 +117,9 @@ public class DALpeople: DALMalshinon
     public List<Person> getPeopleByName(string firstName, string lastName)
     {
         List<Person> people;
-
         string query = "SELECT * FROM people WHERE first_name = @firstName AND last_name = @lastName";
+        this.openConnection();
+
         try
         {
             this.command = new MySqlCommand(query, connection);
@@ -103,7 +130,9 @@ public class DALpeople: DALMalshinon
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
+        
         people = this.getPeople(command);
+        this.stopConnection();
 
         return people;
     }
@@ -113,8 +142,9 @@ public class DALpeople: DALMalshinon
     public List<Person> getPeopleBySecretCode(string secretCode)
     {
         List<Person> people;
-
         string query = "SELECT * FROM people WHERE secret_Code = @secretCode";
+        this.openConnection();
+
         try
         {
             this.command = new MySqlCommand(query, connection);
@@ -126,6 +156,7 @@ public class DALpeople: DALMalshinon
         }
 
         people = this.getPeople(command);
+        this.stopConnection();
         
         return people;
     }
@@ -135,8 +166,9 @@ public class DALpeople: DALMalshinon
     public List<Person> getPeopleByType(string type)
     {
         List<Person> people;
-
         string query = "SELECT * FROM people WHERE type = @type";
+        this.openConnection();
+
         try
         {
             this.command = new MySqlCommand(query, connection);
@@ -148,6 +180,7 @@ public class DALpeople: DALMalshinon
         }
 
         people = this.getPeople(command);
+        this.stopConnection();
         
         return people;
     }
@@ -158,6 +191,8 @@ public class DALpeople: DALMalshinon
     {
         int success = 0;
         string query = "UPDATE people SET num_reports = num_reports + @num WHERE id = @reporter_id";
+        this.openConnection();
+
         try
         {
             command = new MySqlCommand(query, connection);
@@ -169,6 +204,7 @@ public class DALpeople: DALMalshinon
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
+        this.stopConnection();
 
         return (success > 0);
     }
@@ -179,6 +215,8 @@ public class DALpeople: DALMalshinon
     {
         int success = 0;
         string query = "UPDATE people SET num_mentions = num_mentions + @num WHERE id = @target_id";
+        this.openConnection();
+
         try
         {
             command = new MySqlCommand(query, connection);
@@ -190,6 +228,7 @@ public class DALpeople: DALMalshinon
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
+        this.stopConnection();
 
         return (success > 0);
     }
@@ -200,6 +239,8 @@ public class DALpeople: DALMalshinon
     {
         int success = 0;
         string query = $"UPDATE people SET type = @type WHERE id = @id";
+        this.openConnection();
+
         try
         {
             command = new MySqlCommand(query, connection);
@@ -211,6 +252,7 @@ public class DALpeople: DALMalshinon
         {
             Console.WriteLine($"Error: {e.GetType().Name}. message: {e.Message}.");
         }
+        this.stopConnection();
 
         return (success > 0);
     }
